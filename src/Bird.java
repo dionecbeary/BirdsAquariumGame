@@ -16,6 +16,7 @@ public class Bird {
     public int height;
     public boolean isAlive;            //a boolean to denote if the hero is alive or dead.
     public Rectangle rec;
+    public boolean isCrashingEagle;
 
 
     // METHOD DEFINITION SECTION
@@ -35,6 +36,7 @@ public class Bird {
         height = 60;
         isAlive = true;
         rec = new Rectangle(xpos, ypos, height, width);
+        isCrashingEagle = false;
 
     } // constructor
 

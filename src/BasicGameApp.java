@@ -44,7 +44,7 @@ public class BasicGameApp implements Runnable {
     public Image fencePic;
     public Image background;
     public Image endScreen;
-    public Image deadChick;
+    public Image ghostPic;
 
     //Declare the objects used in the program
     //These are things that are made up of more than one variable type
@@ -81,7 +81,7 @@ public class BasicGameApp implements Runnable {
         fencePic = Toolkit.getDefaultToolkit().getImage("fence.png");
         background = Toolkit.getDefaultToolkit().getImage("field.png");
         endScreen = Toolkit.getDefaultToolkit().getImage("gameover.jpeg");
-        deadChick = Toolkit.getDefaultToolkit().getImage("ghost.png");
+        ghostPic = Toolkit.getDefaultToolkit().getImage("ghost.png");
         chicken = new Bird(700,300,-4,4);
         chick = new Bird(710,300,3,3);
         chick.height = 40;
@@ -114,13 +114,30 @@ public class BasicGameApp implements Runnable {
         if(chicken.rec.intersects(eagle.rec))
         {
             eagle.xpos = 200;
-            System.out.println("The chicken has scared off the eagle!");
+            System.out.println("The chicken has scared off the eagle.");
         }
-        if(eagle.rec.intersects(chick.rec))
+        if(eagle.rec.intersects(chick.rec) && chick.isCrashingEagle == false)
         {
-            System.out.println("Eagle has eaten chick :(((");
+            chick.isCrashingEagle = true;
+            System.out.println("Eagle attacked chick :(");
             if (chickLives > 0) {
             chickLives = chickLives - 1;
+            }
+            if (chickLives == 0) {
+                System.out.println("Eagle has eaten chick ;-;");
+                System.out.println(
+                        "            _________________\n" +
+                        "           /                \\\\\n" +
+                        "          |  _     ___   _   ||\n" +
+                        "          | | \\     |   | \\  ||\n" +
+                        "          | |  |    |   |  | ||\n" +
+                        "          | |_/     |   |_/  ||\n" +
+                        "          | | \\     |   |    ||\n" +
+                        "          | |  \\    |   |    ||\n" +
+                        "          | |   \\. _|_. | .  ||\n" +
+                        "          |                  ||\n" +
+                        "          |      Chick       ||\n" +
+                        "          |                  ||");
             }
 
         }
@@ -136,6 +153,11 @@ public class BasicGameApp implements Runnable {
         {
             eagle.dx = -eagle.dx;
         }
+
+        if(eagle.rec.intersects(chick.rec) == false)
+        {
+            chick.isCrashingEagle = false;
+        }
     }
 
     public void commentary(){
@@ -143,19 +165,19 @@ public class BasicGameApp implements Runnable {
         {
             if(chicken.rec.intersects(eagle.rec))
             {
-            System.out.println("The chicken has scared off the eagle!");
+            System.out.println("Chicken has scared off Eagle!");
             }
             if(chicken.rec.intersects(fence.rec))
             {
-                System.out.println("chicken: 'oof'");
+                System.out.println("Chicken: 'oof'");
             }
             if(chick.rec.intersects(fence.rec))
             {
-                System.out.println("chick: 'oof'");
+                System.out.println("Chick: 'oof'");
             }
             if(eagle.rec.intersects(fence.rec))
             {
-                System.out.println("eagle: 'oof'");
+                System.out.println("Eagle: 'oof'");
             }
         }
     }
@@ -238,7 +260,7 @@ public class BasicGameApp implements Runnable {
             g.draw(new Rectangle(fence.xpos, fence.ypos, 30, 300));
         }else{
             g.drawImage(endScreen, 0, 0, 1000, 700, null);
-            g.drawImage(chickPic, chick.xpos, chick.ypos,40 , 40, null);
+            g.drawImage(ghostPic, chick.xpos, chick.ypos,40 , 40, null);
             g.draw(new Rectangle(chick.xpos, chick.ypos, 40, 40));
 
         }
