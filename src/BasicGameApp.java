@@ -111,11 +111,6 @@ public class BasicGameApp implements Runnable {
     }
 
     public void crash(){
-        if(chicken.rec.intersects(eagle.rec))
-        {
-            eagle.xpos = 200;
-            System.out.println("The chicken has scared off the eagle.");
-        }
         if(eagle.rec.intersects(chick.rec) && chick.isCrashingEagle == false)
         {
             chick.isCrashingEagle = true;
@@ -141,22 +136,24 @@ public class BasicGameApp implements Runnable {
             }
 
         }
-        if(chicken.rec.intersects(fence.rec))
-        {
-            chicken.dx = -chicken.dx;
-        }
-        if(chick.rec.intersects(fence.rec))
-        {
-            chick.dx = -chick.dx;
-        }
-        if(eagle.rec.intersects(fence.rec))
-        {
-            eagle.dx = -eagle.dx;
-        }
+        if (chickLives > 0) {
+            if (chicken.rec.intersects(eagle.rec)) {
+                eagle.xpos = 200;
+                System.out.println("The chicken has scared off the eagle.");
+            }
+            if (chicken.rec.intersects(fence.rec)) {
+                chicken.dx = -chicken.dx;
+            }
+            if (chick.rec.intersects(fence.rec)) {
+                chick.dx = -chick.dx;
+            }
+            if (eagle.rec.intersects(fence.rec)) {
+                eagle.dx = -eagle.dx;
+            }
 
-        if(eagle.rec.intersects(chick.rec) == false)
-        {
-            chick.isCrashingEagle = false;
+            if (eagle.rec.intersects(chick.rec) == false) {
+                chick.isCrashingEagle = false;
+            }
         }
     }
 
