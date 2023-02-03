@@ -56,6 +56,17 @@ public class Bird {
         }
         rec = new Rectangle(xpos, ypos, height, width);
     }
+    public void wrap(){
+        if (ypos>650 || ypos<0){
+            dy =- dy;
+        }
+        if (xpos>940){
+            ypos = 0;
+        }
+        if (xpos<0){
+            xpos = 940;
+        }
+    }
 }
 
 

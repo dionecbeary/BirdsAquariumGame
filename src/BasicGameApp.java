@@ -185,7 +185,11 @@ public class BasicGameApp implements Runnable {
         commentary();
         chicken.bounce();
         chicken.move();
-        chick.bounce();
+        if (chickLives > 0){
+            chick.bounce();
+        } else {
+            chick.wrap();
+        }
         chick.move();
         eagle.bounce();
         eagle.move();
