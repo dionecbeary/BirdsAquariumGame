@@ -38,9 +38,12 @@ public class BasicGameApp implements Runnable {
     public JPanel panel;
 
     public BufferStrategy bufferStrategy;
-    public Image chickenPic;
-    public Image chickPic;
-    public Image eaglePic;
+    public Image chickenRPic;
+    public Image chickenLPic;
+    public Image chickRPic;
+    public Image chickLPic;
+    public Image eagleRPic;
+    public Image eagleLPic;
     public Image fencePic;
     public Image background;
     public Image endScreen;
@@ -75,9 +78,12 @@ public class BasicGameApp implements Runnable {
 
         //variable and objects
         //create (construct) the objects needed for the game and load up
-        chickenPic = Toolkit.getDefaultToolkit().getImage("chicken.png"); //load the picture
-        chickPic = Toolkit.getDefaultToolkit().getImage("chick.png");
-        eaglePic = Toolkit.getDefaultToolkit().getImage("eagle.png");
+        chickenRPic = Toolkit.getDefaultToolkit().getImage("chickenR.png"); //load the picture
+        chickenLPic = Toolkit.getDefaultToolkit().getImage("chickenL.png");
+        chickRPic = Toolkit.getDefaultToolkit().getImage("chickR.png");
+        chickLPic = Toolkit.getDefaultToolkit().getImage("chickL.png");
+        eagleRPic = Toolkit.getDefaultToolkit().getImage("eagleR.png");
+        eagleLPic = Toolkit.getDefaultToolkit().getImage("eagleL.png");
         fencePic = Toolkit.getDefaultToolkit().getImage("fence.png");
         background = Toolkit.getDefaultToolkit().getImage("field.png");
         endScreen = Toolkit.getDefaultToolkit().getImage("gameover.jpeg");
@@ -141,18 +147,29 @@ public class BasicGameApp implements Runnable {
                 eagle.xpos = 200;
                 System.out.println("The chicken has scared off the eagle.");
             }
-            if (chicken.rec.intersects(fence.rec)) {
+            if (chicken.rec.intersects(fence.rec) && chicken.isCrashingFence == false) {
+                chicken.isCrashingFence = true;
                 chicken.dx = -chicken.dx;
             }
-            if (chick.rec.intersects(fence.rec)) {
+            if (chick.rec.intersects(fence.rec) && chick.isCrashingFence == false) {
+                chick.isCrashingFence = true;
                 chick.dx = -chick.dx;
             }
-            if (eagle.rec.intersects(fence.rec)) {
+            if (eagle.rec.intersects(fence.rec) && eagle.isCrashingFence == false) {
+                eagle.isCrashingFence = true;
                 eagle.dx = -eagle.dx;
             }
-
             if (eagle.rec.intersects(chick.rec) == false) {
                 chick.isCrashingEagle = false;
+            }
+            if (chicken.rec.intersects(fence.rec) == false) {
+                chicken.isCrashingFence = false;
+            }
+            if (chick.rec.intersects(fence.rec) == false) {
+                chick.isCrashingFence = false;
+            }
+            if (eagle.rec.intersects(fence.rec) == false) {
+                eagle.isCrashingFence = false;
             }
         }
     }
@@ -189,6 +206,7 @@ public class BasicGameApp implements Runnable {
             chick.bounce();
         } else {
             chick.wrap();
+            System.out.println("ghost touched edge");
         }
         chick.move();
         eagle.bounce();
@@ -248,13 +266,25 @@ public class BasicGameApp implements Runnable {
         if (chickLives>0){
             g.drawImage(background, 0, 0, 1000, 700, null);
 
-            g.drawImage(chickenPic, chicken.xpos, chicken.ypos, chicken.width, chicken.height, null);
+            if (chicken.dx > 0){
+                g.drawImage(chickenRPic, chicken.xpos, chicken.ypos, chicken.width, chicken.height, null);
+            }else{
+                g.drawImage(chickenLPic, chicken.xpos, chicken.ypos, chicken.width, chicken.height, null);
+            }
             g.draw(new Rectangle(chicken.xpos, chicken.ypos, chicken.width, chicken.height));
 
-            g.drawImage(chickPic, chick.xpos, chick.ypos,40 , 40, null);
+            if (chick.dx > 0){
+                g.drawImage(chickRPic, chick.xpos, chick.ypos,40 , 40, null);
+            }else{
+                g.drawImage(chickLPic, chick.xpos, chick.ypos,40 , 40, null);
+            }
             g.draw(new Rectangle(chick.xpos, chick.ypos, 40, 40));
 
-            g.drawImage(eaglePic, eagle.xpos, eagle.ypos, eagle.width, eagle.height, null);
+            if (eagle.dx > 0){
+                g.drawImage(eagleRPic, eagle.xpos, eagle.ypos, eagle.width, eagle.height, null);
+            }else{
+                g.drawImage(eagleLPic, eagle.xpos, eagle.ypos, eagle.width, eagle.height, null);
+            }
             g.draw(new Rectangle(eagle.xpos, eagle.ypos, eagle.width, eagle.height));
 
             g.drawImage(fencePic, fence.xpos, fence.ypos, 30, 300, null);
@@ -262,7 +292,6 @@ public class BasicGameApp implements Runnable {
         }else{
             g.drawImage(endScreen, 0, 0, 1000, 700, null);
             g.drawImage(ghostPic, chick.xpos, chick.ypos,40 , 40, null);
-            g.draw(new Rectangle(chick.xpos, chick.ypos, 40, 40));
 
         }
 

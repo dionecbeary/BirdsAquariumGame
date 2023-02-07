@@ -17,6 +17,7 @@ public class Bird {
     public boolean isAlive;            //a boolean to denote if the hero is alive or dead.
     public Rectangle rec;
     public boolean isCrashingEagle;
+    public boolean isCrashingFence;
 
 
     // METHOD DEFINITION SECTION
@@ -61,7 +62,7 @@ public class Bird {
             dy =- dy;
         }
         if (xpos>940){
-            ypos = 0;
+            xpos = 0;
         }
         if (xpos<0){
             xpos = 940;

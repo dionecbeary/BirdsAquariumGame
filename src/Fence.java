@@ -28,18 +28,18 @@ public class Fence {
         dx =pDx;
         dy =pDy;
         width = 30;
-        height = 500;
+        height = 300;
         isAlive = true;
         rec = new Rectangle(xpos, ypos, width, height);
 
     } // constructor
 
     //The move method.  Everytime this is run (or "called") the hero's x position and y position change by dx and dy
-    public void move() {
-        xpos = xpos + dx;
-        ypos = ypos + dy;
-        rec = new Rectangle(xpos, ypos, width, height);
-    }
+//    public void move() {
+//        xpos = xpos + dx;
+//        ypos = ypos + dy;
+//        rec = new Rectangle(xpos, ypos, width, height);
+//    }
 
     public void bounce(){
         if (ypos>400 || ypos<0){// ypos > 700-hieght
