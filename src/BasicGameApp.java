@@ -45,6 +45,7 @@ public class BasicGameApp implements Runnable {
     public Image eagleRPic;
     public Image eagleLPic;
     public Image fencePic;
+    public Image seedsPic;
     public Image background;
     public Image endScreen;
     public Image ghostPic;
@@ -56,6 +57,7 @@ public class BasicGameApp implements Runnable {
     private Bird eagle;
     private int chickLives = 3;
     private Fence fence;
+    private Seeds seeds;
 
 
 
@@ -88,12 +90,14 @@ public class BasicGameApp implements Runnable {
         background = Toolkit.getDefaultToolkit().getImage("field.png");
         endScreen = Toolkit.getDefaultToolkit().getImage("gameover.jpeg");
         ghostPic = Toolkit.getDefaultToolkit().getImage("ghost.png");
+        seedsPic = Toolkit.getDefaultToolkit().getImage("seeds.png");
         chicken = new Bird(700,300,-4,4);
         chick = new Bird(710,300,3,3);
         chick.height = 40;
         chick.width = 40;
         eagle = new Bird(200,300,-7,7);
         fence = new Fence(500, 200, 0, 3);
+        seeds = new Seeds(50, 0, 1, 1);
 
     }// BasicGameApp()
 
@@ -120,11 +124,13 @@ public class BasicGameApp implements Runnable {
         if(eagle.rec.intersects(chick.rec) && chick.isCrashingEagle == false)
         {
             chick.isCrashingEagle = true;
-            System.out.println("Eagle attacked chick :(");
             if (chickLives > 0) {
             chickLives = chickLives - 1;
+            System.out.println("Eagle has attacked chick!");
             }
             if (chickLives == 0) {
+                chick.dx = 5;
+                chick.dy = 5;
                 System.out.println("Eagle has eaten chick ;-;");
                 System.out.println(
                         "            _________________\n" +
@@ -143,21 +149,52 @@ public class BasicGameApp implements Runnable {
 
         }
         if (chickLives > 0) {
-            if (chicken.rec.intersects(eagle.rec)) {
+            if ((seeds.rec.intersects(chicken.rec)||seeds.rec.intersects(chick.rec)||seeds.rec.intersects(eagle.rec))&&seeds.isCrashing==false){
+                if (seeds.rec.intersects(chick.rec)){
+                    System.out.println("Chick ate seeds and grew stronger!");
+                    chick.width += 15;
+                    chick.height += 15;
+                    chick.dx = chick.dx + 6;
+                    chick.dy = chick.dy + 2;
+                }
+                if (seeds.rec.intersects(eagle.rec)){
+                    System.out.println("Eagle ate seeds and grew stronger!");
+                    eagle.dx += 1;
+                    eagle.dy += 1;
+                }
+                if (seeds.rec.intersects(chicken.rec)){
+                    System.out.println("Chicken ate seeds and is slowing down!");
+                    chicken.dx -= 1;
+                    chicken.dx -= 1;
+                }
+                seeds.isCrashing = true;
+            }
+            if (seeds.rec.intersects(chicken.rec)==false && seeds.rec.intersects(chick.rec)==false && seeds.rec.intersects(eagle.rec)==false){
+                seeds.isCrashing = false;
+            }
+            if (chicken.rec.intersects(eagle.rec) && chicken.isCrashingEagle == false) {
                 eagle.xpos = 200;
-                System.out.println("The chicken has scared off the eagle.");
+                System.out.println("Chicken has scared off Eagle!");
+                chicken.isCrashingEagle = true;
             }
             if (chicken.rec.intersects(fence.rec) && chicken.isCrashingFence == false) {
                 chicken.isCrashingFence = true;
                 chicken.dx = -chicken.dx;
+//                System.out.println("Chicken: 'oof'");
             }
             if (chick.rec.intersects(fence.rec) && chick.isCrashingFence == false) {
                 chick.isCrashingFence = true;
                 chick.dx = -chick.dx;
+//                System.out.println("Chick: 'oof'");
             }
             if (eagle.rec.intersects(fence.rec) && eagle.isCrashingFence == false) {
                 eagle.isCrashingFence = true;
                 eagle.dx = -eagle.dx;
+//                System.out.println("Eagle: 'oof'");
+            }
+
+            if (chicken.rec.intersects(eagle.rec) == false) {
+                chicken.isCrashingEagle = false;
             }
             if (eagle.rec.intersects(chick.rec) == false) {
                 chick.isCrashingEagle = false;
@@ -174,43 +211,22 @@ public class BasicGameApp implements Runnable {
         }
     }
 
-    public void commentary(){
-        if(chickLives> 0)
-        {
-            if(chicken.rec.intersects(eagle.rec))
-            {
-            System.out.println("Chicken has scared off Eagle!");
-            }
-            if(chicken.rec.intersects(fence.rec))
-            {
-                System.out.println("Chicken: 'oof'");
-            }
-            if(chick.rec.intersects(fence.rec))
-            {
-                System.out.println("Chick: 'oof'");
-            }
-            if(eagle.rec.intersects(fence.rec))
-            {
-                System.out.println("Eagle: 'oof'");
-            }
-        }
-    }
 
     public void moveThings() {
         //calls the move( ) code in the objects
         crash();
-        commentary();
         chicken.bounce();
         chicken.move();
         if (chickLives > 0){
             chick.bounce();
         } else {
             chick.wrap();
-            System.out.println("ghost touched edge");
         }
         chick.move();
         eagle.bounce();
         eagle.move();
+        seeds.bounce();
+        seeds.move();
         fence.bounce();
         //fence.move();
     }
@@ -286,6 +302,9 @@ public class BasicGameApp implements Runnable {
                 g.drawImage(eagleLPic, eagle.xpos, eagle.ypos, eagle.width, eagle.height, null);
             }
             g.draw(new Rectangle(eagle.xpos, eagle.ypos, eagle.width, eagle.height));
+
+            g.drawImage(seedsPic, seeds.xpos, seeds.ypos, seeds.width, seeds.height, null);
+            g.draw(new Rectangle(seeds.xpos, seeds.ypos, seeds.width, seeds.height));
 
             g.drawImage(fencePic, fence.xpos, fence.ypos, 30, 300, null);
             g.draw(new Rectangle(fence.xpos, fence.ypos, 30, 300));
