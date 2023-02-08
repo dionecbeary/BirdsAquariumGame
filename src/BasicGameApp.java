@@ -322,7 +322,6 @@ public class BasicGameApp implements Runnable {
             g.drawImage(ghostPic, chick.xpos, chick.ypos,40 , 40, null);
         } else if(seedsEaten == 3){
             g.drawImage(winScreen, 0, 0, 1000, 700, null);
-
             if (chick.dx > 0){
                 g.drawImage(chickRPic, chick.xpos, chick.ypos,40 , 40, null);
             }else{
